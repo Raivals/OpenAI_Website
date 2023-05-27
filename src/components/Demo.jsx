@@ -10,6 +10,8 @@ const Demo = () => {
 
   const [getSummary, { error, isFetching }] = useLazyGetSummaryQuery()
 
+  const [copied, setCopied] = useState("")
+
   /* Save the articles to the Local Storage */
   useEffect(() => {
     const articlesFromLocalStorage = JSON.parse(
@@ -40,6 +42,12 @@ const Demo = () => {
         JSON.stringify(updateAllArticles),
       )
     }
+  }
+
+  const handleCopy = (copyUrl) => {
+    setCopied(copyUrl)
+    navigator.clipboard.writeText(copyUrl)
+    setTimeout(() => setCopied(false), 3000)
   }
 
   return (
@@ -81,9 +89,9 @@ const Demo = () => {
               onClick={() => setArticle(item)}
               className="link_card"
             >
-              <div className="copy_btn">
+              <div className="copy_btn" onClick={() => handleCopy(item.url)}>
                 <img
-                  src={copy}
+                  src={copied === item.url ? tick : copy}
                   alt="copy-icon"
                   className="w-[40%] h-[40%] object-contain"
                 />
